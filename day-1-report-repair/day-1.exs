@@ -12,47 +12,53 @@ defmodule Day1 do
 		normalize_input(input)
   end
 
-	def product_of_two_entries_that_sum_to_2020(input) do
-		match = Enum.find(input, fn n1 ->
-			n2 = 2020 - n1
-			Enum.member?(List.delete(input, n1), n2)
+	# Stolen from https://www.adiiyengar.com/blog/20190608/elixir-combinations
+	def combinations(list, num)
+	def combinations(_list, 0), do: [[]]
+	def combinations(list = [], _num), do: list
+	def combinations([head | tail], num) do
+		Enum.map(combinations(tail, num - 1), &[head | &1]) ++
+			combinations(tail, num)
+	end
+	
+	def find_two_numbers_that_sum_to(sum, input) do
+		match = Enum.find(input, fn n ->
+			Enum.member?(List.delete(input, n), (sum - n))
 		end)
 		
-		match * (2020 - match)
+		[match, sum - match]
 	end
-		
-  #def fuel_required(mass) do
-	#trunc(mass / 3) - 2
-  #end
-  #def total_fuel_required(module_mass) do
-	#Stream.iterate(module_mass, &fuel_required/1)
-	#|> Enum.take_while(fn x -> x > 0 end)
-	#|> Enum.drop(1) # Exclude the mass of the module
-	#|> Enum.sum
-  #end
 	
-  @doc """
-		Find the two entries that sum to 2020 and then multiply those two numbers together.
-  """
-  def part1 do
-		input = get_input()
-		product_of_two_entries_that_sum_to_2020(input)
-  end
+	def find_three_numbers_that_sum_to(sum, input) do
+		Enum.find(combinations(input, 3), fn [n1, n2, n3] ->
+			(n1 + n2 + n3) === sum
+		end)
+	end
 
-  #@doc """
-  #Fuel itself requires fuel just like a module. However, that fuel
-  #also requires fuel, and that fuel requires fuel, and so on.
-  #So, for each module mass, calculate its fuel and add it to the 
-  #total. Then, treat the fuel amount you just calculated as the
-  #input mass and repeat the process, continuing until a fuel
-  #requirement is zero or negative.
-  #"""
-  #def part2 do
-	#get_input()
-	#|> Enum.map(&total_fuel_required/1)
-	#|> Enum.sum
-  #end
+	def product_of_two_entries_that_sum_to_2020(input) do
+		[n1, n2] = find_two_numbers_that_sum_to(2020, input)
+		n1 * n2
+	end
+
+	def product_of_three_entries_that_sum_to_2020(input) do
+		[n1, n2, n3] = find_three_numbers_that_sum_to(2020, input)
+		n1 * n2 * n3
+	end
+	
+	@doc """
+		Find the two entries that sum to 2020 and then multiply those two numbers together.
+	"""
+	def part1 do
+		product_of_two_entries_that_sum_to_2020 get_input()
+	end
+	
+	@doc """
+		Find the three entries that sum to 2020 and then multiply those three numbers together.
+	"""
+	def part2 do
+		product_of_three_entries_that_sum_to_2020 get_input()
+	end
 end
 
 IO.puts "Part 1: #{Day1.part1}"
-#IO.puts "Part 2: #{Day1.part2}"
+IO.puts "Part 2: #{Day1.part2}"
