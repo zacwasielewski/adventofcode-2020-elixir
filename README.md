@@ -23,3 +23,7 @@ Assuming that Elixir is [installed on your system](https://elixir-lang.org/insta
 ### Day 1:
 
 **There's no shame in stealing (code)!** I implemented Part 1 using a simple, efficient algorithm that runs in [O(n) time](https://justin.abrah.ms/computer-science/big-o-notation-explained.html). But as usual, Part 2 switched things up just enough that my “simple” solution no longer felt like a good fit. So I threw caution/efficiency to the wind and just used [combinations](https://www.mathsisfun.com/combinatorics/combinations-permutations.html), as I should have done in Part 1 instead of getting sidetracked by premature optimization. As it turns out, Elixir doesn't [natively support permutations and combinations like my good friend Ruby](https://apidock.com/ruby/Array/permutation), but if [someone else has written that code already](https://www.adiiyengar.com/blog/20190608/elixir-combinations) (which is essentially just an implementation detail), why should I waste time reinventing the wheel?
+
+### Day 2:
+
+Module nesting and scoping are really intuitive.
